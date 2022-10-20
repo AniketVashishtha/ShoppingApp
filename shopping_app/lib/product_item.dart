@@ -4,8 +4,7 @@ import 'package:shopping_app/cart_provider.dart';
 import 'package:shopping_app/cart_info_provider.dart';
 
 class Product extends ConsumerStatefulWidget {
-  const Product({Key? key, this.name, this.price, this.imgUrl, this.id})
-      : super(key: key);
+  const Product({Key? key, this.name, this.price, this.imgUrl, this.id}) : super(key: key);
   final String? name;
   final int? price;
   final String? imgUrl;
@@ -45,9 +44,11 @@ class _ProductState extends ConsumerState<Product> {
             icon: const Icon(Icons.shopping_cart),
             onPressed: () {
               ref.read(cartProvider.notifier).increment();
-              ref
-                  .read(cartInfoProvider.notifier)
-                  .addItem(widget.id.toString(), widget.price!, widget.name!);
+              ref.read(cartInfoProvider.notifier).addItem(
+                    widget.id.toString(),
+                    widget.price!,
+                    widget.name!,
+                  );
             },
           ),
         )
