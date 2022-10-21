@@ -34,10 +34,14 @@ class Checkout extends ConsumerWidget {
                       //     .length
                       //     .toString())
 
-                      label: Text(ref.read(cartInfoProvider.notifier).totalAmount.toString()),
+                      label: Text(ref
+                          .read(cartInfoProvider.notifier)
+                          .totalAmount
+                          .toString()),
                       backgroundColor: Theme.of(context).primaryColor,
                     ),
-                    ElevatedButton(onPressed: () => {}, child: Text('ORDER NOW'))
+                    ElevatedButton(
+                        onPressed: () => {}, child: Text('ORDER NOW'))
                   ],
                 ),
               )),
@@ -46,11 +50,25 @@ class Checkout extends ConsumerWidget {
             child: ListView.builder(
                 itemCount: ref.read(cartInfoProvider.notifier).items.length,
                 itemBuilder: (ctx, i) {
+                  print('Printing lenght');
+                  print(ref.read(cartInfoProvider.notifier).items.length);
+
+                  var ids =
+                      ref.read(cartInfoProvider.notifier).items.keys.toList();
                   return CartItem(
-                    id: ref.read(cartInfoProvider.notifier).items['${i+1}']!.id,
-                    quantity: ref.read(cartInfoProvider.notifier).items['${i+1}']!.quantity,
-                    name: ref.read(cartInfoProvider.notifier).items['${i+1}']!.productName,
-                    price: ref.read(cartInfoProvider.notifier).items['${i+1}']!.price,
+                    id: ref.read(cartInfoProvider.notifier).items[ids[i]]!.id,
+                    quantity: ref
+                        .read(cartInfoProvider.notifier)
+                        .items[ids[i]]!
+                        .quantity,
+                    name: ref
+                        .read(cartInfoProvider.notifier)
+                        .items[ids[i]]!
+                        .productName,
+                    price: ref
+                        .read(cartInfoProvider.notifier)
+                        .items[ids[i]]!
+                        .price,
                   );
                 }),
           )
