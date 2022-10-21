@@ -10,6 +10,8 @@ import 'dart:async';
 import 'dart:convert';
 
 List<ProductItem> products = [];
+List<String> categories = [];
+List<ProductItem> filteredList = [];
 
 void main() {
   runApp(ProviderScope(child: MyApp()));
@@ -20,25 +22,26 @@ class ProductItem {
   final String title;
   final double price;
   final String image;
+  final String category;
 
   ProductItem(
       {required this.id,
       required this.title,
       required this.price,
-      required this.image});
+      required this.image,
+      required this.category});
 
   factory ProductItem.fromJson(Map<String, dynamic> json) {
     return ProductItem(
-      id: json['id'],
-      title: json['title'],
-      price: json['price'],
-      image: json['image'],
-    );
+        id: json['id'],
+        title: json['title'],
+        price: json['price'] is int ? json['price'].toDouble() : json['price'],
+        image: json['image'],
+        category: json['category']);
   }
 }
 
 void fetchProducts() async {
-  print('I am going to fetch');
   final response =
       await http.get(Uri.parse('http://fakestoreapi.com/products'));
 
@@ -49,9 +52,34 @@ void fetchProducts() async {
     print(response.body);
     final rows = jsonDecode(response.body);
     for (var row in rows) {
-      print(row);
+      //print(row);
       products.add(ProductItem.fromJson(row));
     }
+  } else {
+    // If the server did not return a 200 OK response,
+    // then throw an exception.
+    throw Exception('Failed to load album');
+  }
+}
+
+void fetchCategories() async {
+  final response =
+      await http.get(Uri.parse('https://fakestoreapi.com/products/categories'));
+
+  if (response.statusCode == 200) {
+    // If the server did return a 200 OK response,
+    // then parse the JSON.
+    //return Album.fromJson(jsonDecode(response.body));
+    print('Categories are being displayed');
+    // String cats =  response.body;
+    // for (var cat in cats) {
+    //   categories.add(cat);
+    // }
+    // final rows = jsonDecode(response.body);
+    // for (var row in rows) {
+    //   print(row);
+    //   products.add(ProductItem.fromJson(row));
+    // }
   } else {
     // If the server did not return a 200 OK response,
     // then throw an exception.
@@ -67,48 +95,27 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final popList = fetchCategories();
     fetchProducts();
     return MaterialApp(home: ShopApp());
   }
 }
 
-class ShopApp extends StatelessWidget {
+class ShopApp extends StatefulWidget {
+  @override
+  State<ShopApp> createState() => _ShopAppState();
+}
+
+class _ShopAppState extends State<ShopApp> {
+  //final popList = fetchCategories();
+  final popList = [
+    "electronics",
+    "jewelery",
+    "men's clothing",
+    "women's clothing"
+  ];
+
   //const ShopApp({Key? key}) : super(key: key);
-
-  //final List<Map<String, dynamic>> products = [
-  //   {
-  //     "id": 1,
-  //     "category": "Mobile",
-  //     "name": "Iphone 13",
-  //     'Image':
-  //         'https://store.storeimages.cdn-apple.com/4668/as-images.apple.com/is/iphone-13-model-unselect-gallery-1-202207?wid=5120&hei=2880&fmt=p-jpg&qlt=80&.v=1654893619853',
-  //     "price": "150000",
-  //   },
-  //   {
-  //     "id": 2,
-  //     "category": "Mobile",
-  //     "name": "Samsung Galaxy",
-  //     'Image':
-  //         'https://images.samsung.com/is/image/samsung/assets/in/smartphones/galaxy-z-fold3-5g/buy/ZFold3_Carousel_MainSingleKV_withDisclaimer_PC.jpg?imwidth=1536',
-  //     "price": "50000",
-  //   },
-  //   {
-  //     "id": 3,
-  //     "category": "Laptop",
-  //     "name": "Macook Pro",
-  //     'Image':
-  //         'https://store.storeimages.cdn-apple.com/4668/as-images.apple.com/is/mbp16-spacegray-select-202110?wid=904&hei=840&fmt=jpeg&qlt=90&.v=1632788574000',
-  //     "price": '150000',
-  //   },
-  //   {
-  //     "id": 4,
-  //     "category": "Laptop",
-  //     "name": "IBM Thinkpad",
-  //     'Image': 'https://i.ytimg.com/vi/ftn1VrCPVpk/maxresdefault.jpg',
-  //     "price": '50000',
-  //   },
-  // ];
-
   get leading => null;
 
   @override
@@ -121,28 +128,36 @@ class ShopApp extends StatelessWidget {
               // add icon, by default "3 dot" icon
               // icon: Icon(Icons.book)
               itemBuilder: (context) {
-            return const [
-              PopupMenuItem<int>(
-                value: 0,
-                child: Text("Phones"),
-              ),
-              PopupMenuItem<int>(
-                value: 1,
-                child: Text("Laptops"),
-              ),
-            ];
-          }, onSelected: (value) {
-            if (value == 0) {
-              Navigator.push(
-                context,
-                MaterialPageRoute(builder: (context) => ShopApp()),
-              );
-            } else if (value == 1) {
-              Navigator.push(
-                context,
-                MaterialPageRoute(builder: (context) => Laptop()),
-              );
-            }
+            return List.generate(
+                popList.length,
+                (index) => PopupMenuItem(
+                      value: index,
+                      child: Text(popList[index]),
+                    ));
+            // PopupMenuItem<int>(
+            //   value: 1,
+            //   child: Text("Laptops"),
+            // ),;
+          }, onSelected: (int value) {
+            filteredList = products
+                .where((product) => product.category == popList[value])
+                .toList();
+
+            setState(() {});
+
+            //print(_filteredList);
+
+            // if (value == 0) {
+            //   Navigator.push(
+            //     context,
+            //     MaterialPageRoute(builder: (context) => ShopApp()),
+            //   );
+            // } else if (value == 1) {
+            //   Navigator.push(
+            //     context,
+            //     MaterialPageRoute(builder: (context) => Laptop()),
+            //   );
+            // }
           }),
           actions: [
             Stack(
@@ -177,7 +192,7 @@ class ShopApp extends StatelessWidget {
         ),
         body: GridView.builder(
           padding: const EdgeInsets.all(10.0),
-          itemCount: 2,
+          itemCount: filteredList.length,
           gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
             crossAxisCount: 2,
             childAspectRatio: 3 / 2,
@@ -185,10 +200,10 @@ class ShopApp extends StatelessWidget {
             mainAxisSpacing: 10,
           ),
           itemBuilder: (ctx, i) => Product(
-            id: products[i].id,
-            name: products[i].title,
-            imgUrl: products[i].image,
-            price: products[i].price,
+            id: filteredList[i].id,
+            name: filteredList[i].title,
+            imgUrl: filteredList[i].image,
+            price: filteredList[i].price,
           ),
         ));
   }
