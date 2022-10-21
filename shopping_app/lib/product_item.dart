@@ -4,9 +4,10 @@ import 'package:shopping_app/cart_provider.dart';
 import 'package:shopping_app/cart_info_provider.dart';
 
 class Product extends ConsumerStatefulWidget {
-  const Product({Key? key, this.name, this.price, this.imgUrl, this.id}) : super(key: key);
+  const Product({Key? key, this.name, this.price, this.imgUrl, this.id})
+      : super(key: key);
   final String? name;
-  final int? price;
+  final double? price;
   final String? imgUrl;
   final int? id;
 

@@ -6,7 +6,7 @@ class CartItem {
   final String id;
   final String productName;
   final int quantity;
-  final String price;
+  final double price;
 
   CartItem(
       {required this.id,
@@ -26,16 +26,16 @@ class CartInfo with ChangeNotifier {
     return _items.length;
   }
 
-  int get totalAmount {
-    var total = 0;
+  double get totalAmount {
+    double total = 0;
     print(_items);
     _items.forEach((key, value) {
-      total += value.quantity * int.parse(value.price);
+      total += value.quantity * value.price;
     });
     return total;
   }
 
-  void addItem(String productID, int price, String productName) {
+  void addItem(String productID, double price, String productName) {
     if (_items.containsKey(productID)) {
       _items.update(
           productID,
@@ -51,7 +51,7 @@ class CartInfo with ChangeNotifier {
           productID,
           () => CartItem(
               id: DateTime.now().toString(),
-              price: price.toString(),
+              price: price,
               productName: productName,
               quantity: 1));
     }

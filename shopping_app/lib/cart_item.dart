@@ -4,7 +4,7 @@ class CartItem extends StatelessWidget {
   //const CartItem({Key? key}) : super(key: key);
   final String? id;
   final String? name;
-  final String? price;
+  final double? price;
   final int? quantity;
 
   CartItem({this.id, this.name, this.price, this.quantity});
