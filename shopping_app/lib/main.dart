@@ -10,7 +10,7 @@ import 'dart:async';
 import 'dart:convert';
 
 List<ProductItem> products = [];
-List<String> categories = [];
+List<String> popList = [];
 List<ProductItem> filteredList = [];
 
 void main() {
@@ -49,7 +49,7 @@ void fetchProducts() async {
     // If the server did return a 200 OK response,
     // then parse the JSON.
     //return Album.fromJson(jsonDecode(response.body));
-    print(response.body);
+
     final rows = jsonDecode(response.body);
     for (var row in rows) {
       //print(row);
@@ -67,19 +67,14 @@ void fetchCategories() async {
       await http.get(Uri.parse('https://fakestoreapi.com/products/categories'));
 
   if (response.statusCode == 200) {
-    // If the server did return a 200 OK response,
-    // then parse the JSON.
-    //return Album.fromJson(jsonDecode(response.body));
-    print('Categories are being displayed');
-    // String cats =  response.body;
-    // for (var cat in cats) {
-    //   categories.add(cat);
-    // }
-    // final rows = jsonDecode(response.body);
-    // for (var row in rows) {
-    //   print(row);
-    //   products.add(ProductItem.fromJson(row));
-    // }
+    //print(response.body[1]);
+    String oldBody = response.body;
+    oldBody = oldBody.replaceFirst('[', '');
+    oldBody = oldBody.replaceFirst(']', '');
+    popList = oldBody.split(',');
+    for (var i = 0; i < popList.length; i++) {
+      popList[i] = popList[i].replaceAll('"', '');
+    }
   } else {
     // If the server did not return a 200 OK response,
     // then throw an exception.
@@ -89,14 +84,9 @@ void fetchCategories() async {
 
 class MyApp extends StatelessWidget {
   @override
-  void initState() {
-    //super.initState();
-  }
-
-  @override
   Widget build(BuildContext context) {
-    final popList = fetchCategories();
     fetchProducts();
+    fetchCategories();
     return MaterialApp(home: ShopApp());
   }
 }
@@ -108,15 +98,21 @@ class ShopApp extends StatefulWidget {
 
 class _ShopAppState extends State<ShopApp> {
   //final popList = fetchCategories();
-  final popList = [
-    "electronics",
-    "jewelery",
-    "men's clothing",
-    "women's clothing"
-  ];
+  // final popList = [
+  //   "electronics",
+  //   "jewelery",
+  //   "men's clothing",
+  //   "women's clothing"
+  // ];
+  //final popList = categories;
 
   //const ShopApp({Key? key}) : super(key: key);
-  get leading => null;
+  //get leading => null;
+  @override
+  void initState() {
+    filteredList = products;
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -124,40 +120,19 @@ class _ShopAppState extends State<ShopApp> {
         appBar: AppBar(
           title: const Text('Shopping App'),
           centerTitle: true,
-          leading: PopupMenuButton(
-              // add icon, by default "3 dot" icon
-              // icon: Icon(Icons.book)
-              itemBuilder: (context) {
+          leading: PopupMenuButton(itemBuilder: (context) {
             return List.generate(
                 popList.length,
                 (index) => PopupMenuItem(
                       value: index,
                       child: Text(popList[index]),
                     ));
-            // PopupMenuItem<int>(
-            //   value: 1,
-            //   child: Text("Laptops"),
-            // ),;
           }, onSelected: (int value) {
             filteredList = products
                 .where((product) => product.category == popList[value])
                 .toList();
 
             setState(() {});
-
-            //print(_filteredList);
-
-            // if (value == 0) {
-            //   Navigator.push(
-            //     context,
-            //     MaterialPageRoute(builder: (context) => ShopApp()),
-            //   );
-            // } else if (value == 1) {
-            //   Navigator.push(
-            //     context,
-            //     MaterialPageRoute(builder: (context) => Laptop()),
-            //   );
-            // }
           }),
           actions: [
             Stack(
