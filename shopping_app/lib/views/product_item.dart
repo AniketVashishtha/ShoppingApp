@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:shopping_app/cart_provider.dart';
-import 'package:shopping_app/cart_info_provider.dart';
+import 'package:shopping_app/models/cart_provider.dart';
+import 'package:shopping_app/models/cart_info_provider.dart';
 
 class Product extends ConsumerStatefulWidget {
   const Product({Key? key, this.name, this.price, this.imgUrl, this.id})
@@ -16,16 +16,6 @@ class Product extends ConsumerStatefulWidget {
 }
 
 class _ProductState extends ConsumerState<Product> {
-  @override
-
-  // var count = 0;
-  // void cartCounter() {
-  //   count = count + 1;
-  //   setState(() {});
-  //   //String strCount = count.toString();
-  //   print(count);
-  // }
-
   @override
   Widget build(BuildContext context) {
     return GridTile(
@@ -52,12 +42,6 @@ class _ProductState extends ConsumerState<Product> {
                   );
             },
           ),
-        )
-        //footer: Text(price!),
-        //Padding(
-        //padding: const EdgeInsets.only(top: 80.0),
-        //child: Text(price!),
-        //),
-        );
+        ));
   }
 }

@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:shopping_app/cart_info_provider.dart' show cartInfoProvider;
-import 'package:shopping_app/cart_item.dart';
+import 'package:shopping_app/models/cart_info_provider.dart'
+    show cartInfoProvider;
+import 'package:shopping_app/views/cart_item.dart';
 
 class Checkout extends ConsumerWidget {
   const Checkout({Key? key}) : super(key: key);
@@ -28,12 +29,6 @@ class Checkout extends ConsumerWidget {
                     SizedBox(width: 10),
                     Spacer(),
                     Chip(
-                      // label: Text(ref
-                      //     .read(cartInfoProvider.notifier)
-                      //     .items
-                      //     .length
-                      //     .toString())
-
                       label: Text(ref
                           .read(cartInfoProvider.notifier)
                           .totalAmount

@@ -2,17 +2,17 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
-import 'package:shopping_app/cart_indicator.dart';
-import 'package:shopping_app/categories_screen.dart';
-import 'package:shopping_app/category_item.dart';
+import 'package:shopping_app/views/cart_indicator.dart';
+import 'package:shopping_app/screens/categories_screen.dart';
+import 'package:shopping_app/views/category_item.dart';
 import 'package:shopping_app/router.dart';
-import './product_item.dart';
-import 'package:shopping_app/cart_provider.dart';
-import 'package:shopping_app/checkout_screen.dart';
+import 'views/product_item.dart';
+import 'package:shopping_app/models/cart_provider.dart';
+import 'package:shopping_app/screens/checkout_screen.dart';
 import 'package:http/http.dart' as http;
 import 'dart:async';
 import 'dart:convert';
-import 'package:shopping_app/categories_screen.dart';
+import 'package:shopping_app/screens/categories_screen.dart';
 
 void main() {
   runApp(ProviderScope(child: MyApp()));
@@ -68,10 +68,6 @@ class _ShopAppState extends State<ShopApp> {
         Uri.parse('http://fakestoreapi.com/products/category/$final_category'));
 
     if (response.statusCode == 200) {
-      // If the server did return a 200 OK response,
-      // then parse the JSON.
-      //return Album.fromJson(jsonDecode(response.body));
-
       final rows = jsonDecode(response.body);
       for (var row in rows) {
         //print(row);
@@ -79,8 +75,6 @@ class _ShopAppState extends State<ShopApp> {
       }
       setState(() {});
     } else {
-      // If the server did not return a 200 OK response,
-      // then throw an exception.
       throw Exception('Failed to load album');
     }
   }
@@ -88,10 +82,6 @@ class _ShopAppState extends State<ShopApp> {
   @override
   void initState() {
     fetchProducts(widget.final_category);
-    //filteredList = products;
-    // filteredList = products
-    //     .where((product) => product.category == widget.final_category)
-    //     .toList();
     super.initState();
   }
 
@@ -101,20 +91,6 @@ class _ShopAppState extends State<ShopApp> {
       appBar: AppBar(
         title: const Text('Shopping App'),
         centerTitle: true,
-        // leading: PopupMenuButton(itemBuilder: (context) {
-        //   return List.generate(
-        //       popList.length,
-        //       (index) => PopupMenuItem(
-        //             value: index,
-        //             child: Text(popList[index]),
-        //           ));
-        // }, onSelected: (int value) {
-        //   // filteredList = products
-        //   //     .where((product) => product.category == popList[value])
-        //   //     .toList();
-
-        //   setState(() {});
-        //}),
         actions: [
           Stack(
             children: [

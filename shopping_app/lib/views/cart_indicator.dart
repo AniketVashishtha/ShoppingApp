@@ -1,10 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:shopping_app/cart_provider.dart';
+import 'package:shopping_app/models/cart_provider.dart';
 
 class CartIndicator extends ConsumerWidget {
-//   const CartIndicator
-// ({ Key? key }) : super(key: key);
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return Text(

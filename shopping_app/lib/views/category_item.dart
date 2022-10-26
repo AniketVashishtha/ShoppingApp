@@ -3,17 +3,9 @@ import 'package:shopping_app/main.dart';
 import 'package:go_router/go_router.dart';
 
 class CategoryItem extends StatelessWidget {
-  //const CategoryItem({ Key? key }) : super(key: key);
   final String category;
 
   CategoryItem(this.category);
-
-  // void selectCategory(BuildContext ctx) {
-  //   // Navigator.of(ctx).push(MaterialPageRoute(builder: (_) {
-  //   //   return ShopApp(final_category: category);
-
-  //   }));
-  // }
 
   @override
   Widget build(BuildContext context) {

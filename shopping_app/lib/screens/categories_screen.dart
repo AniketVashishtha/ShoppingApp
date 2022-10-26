@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:shopping_app/main.dart';
-import 'package:shopping_app/category_item.dart';
+import 'package:shopping_app/views/category_item.dart';
 import 'package:http/http.dart' as http;
 
 class CategoriesScreen extends StatefulWidget {
@@ -35,8 +35,6 @@ class _CategoriesScreenState extends State<CategoriesScreen> {
       print('Printing popList Widget');
       print(popList_widget);
     } else {
-      // If the server did not return a 200 OK response,
-      // then throw an exception.
       throw Exception('Failed to load album');
     }
   }
@@ -55,7 +53,6 @@ class _CategoriesScreenState extends State<CategoriesScreen> {
       ),
       body: GridView(
         children: popList_widget,
-        //products.map((catData) => CategoryItem(catData.category)).toList(),
         gridDelegate: const SliverGridDelegateWithMaxCrossAxisExtent(
           maxCrossAxisExtent: 200,
           childAspectRatio: 3 / 2,
