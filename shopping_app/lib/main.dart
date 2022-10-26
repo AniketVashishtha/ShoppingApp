@@ -1,9 +1,11 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
 import 'package:shopping_app/cart_indicator.dart';
 import 'package:shopping_app/categories_screen.dart';
 import 'package:shopping_app/category_item.dart';
+import 'package:shopping_app/router.dart';
 import './product_item.dart';
 import 'package:shopping_app/cart_provider.dart';
 import 'package:shopping_app/checkout_screen.dart';
@@ -44,7 +46,11 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     //fetchProducts();
-    return MaterialApp(home: CategoriesScreen());
+    final router = AppRouter();
+    return MaterialApp.router(
+      routeInformationParser: router.router.routeInformationParser,
+      routerDelegate: router.router.routerDelegate,
+    );
   }
 }
 
@@ -113,12 +119,7 @@ class _ShopAppState extends State<ShopApp> {
           Stack(
             children: [
               IconButton(
-                onPressed: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(builder: (context) => Checkout()),
-                  );
-                },
+                onPressed: () => context.push('/checkout'),
                 icon: const Icon(
                   Icons.shopping_cart_rounded,
                   size: 30,
